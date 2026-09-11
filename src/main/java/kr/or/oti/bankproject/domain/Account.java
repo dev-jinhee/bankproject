@@ -6,6 +6,7 @@ import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 
+//계좌
 public class Account {
 	private String accountNo;
 	private String name;
