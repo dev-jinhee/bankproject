@@ -3,6 +3,7 @@ package kr.or.oti.bankproject.dao;
 import java.util.List;
 
 import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.Param;
 
 import kr.or.oti.bankproject.domain.Account;
 import kr.or.oti.bankproject.domain.Transaction;
