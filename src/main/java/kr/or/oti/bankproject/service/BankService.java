@@ -2,6 +2,12 @@ package kr.or.oti.bankproject.service;
 
 import java.util.List;
 
+import org.springframework.stereotype.Service;
+
+import kr.or.oti.bankproject.domain.Account;
+import kr.or.oti.bankproject.domain.Transaction;
+import kr.or.oti.bankproject.repository.BankRepository;
+
 @Service
 public class BankService {
 	
