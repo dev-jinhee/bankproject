@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <title>KOSA Bank - 계좌 상세</title>
+    <link rel="stylesheet" href="common.css">
+</head>
+<body>
+    <nav class="sidebar">
+        <h2>KOSA Bank</h2>
+        <ul>
+            <li><a href="dashboard.html">대시보드</a></li>
+            <li><a href="list.html" class="active">계좌 관리</a></li>
+            <li><a href="create.html">계좌 개설</a></li>
+            <li><a href="banking.html">입출금 처리</a></li>
+        </ul>
+        <a href="login.html" class="logout">로그아웃</a>
+    </nav>
+    <div class="main-wrapper">
+        <div class="topbar"><span>운영자(행원) 시스템 접속 중</span></div>
+        <div class="content">
+            <div class="card">
+                <div class="card-header">
+                    <div class="card-title">계좌 기본 정보</div>
+                    <div>
+                        <button class="btn-success" onclick="goToBanking('deposit')">입금하기</button>
+                        <button class="btn-danger" onclick="goToBanking('withdraw')">출금하기</button>
+                        <a href="list.html" class="btn btn-secondary">목록으로</a>
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>계좌번호</label>
+                        <input type="text" id="infoAccountNo" readonly>
+                    </div>
+                    <div class="form-group">
+                        <label>예금주</label>
+                        <input type="text" id="infoName" readonly>
+                    </div>
+                    <div class="form-group">
+                        <label>현재 잔액</label>
+                        <input type="text" id="infoBalance" readonly style="font-weight:bold; color:#2563eb;">
+                    </div>
+                </div>
+            </div>
+            <div class="card">
+                <div class="card-header">
+                    <div class="card-title">입출금 거래 이력</div>
+                </div>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>거래일자</th>
+                            <th>거래시간</th>
+                            <th>구분</th>
+                            <th>거래금액</th>
+                            <th>거래 후 잔액</th>
+                        </tr>
+                    </thead>
+                    <tbody id="txTableBody">
+                        <tr><td colspan="5" class="empty-row">기록을 불러오는 중입니다.</td></tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+<script>
+    const urlParams = new URLSearchParams(window.location.search);
+    const accountNo = urlParams.get('accountNo');
+
+    async function loadDetail() {
+        if (!accountNo) {
+            alert('계좌번호가 지정되지 않았습니다.');
+            location.href = 'list.html';
+            return;
+        }
+
+        // 기본 정보 조회
+        const resAcc = await fetch(`/accounts/${accountNo}`);
+        if (resAcc.ok) {
+            const acc = await resAcc.json();
+            document.getElementById('infoAccountNo').value = acc.accountNo;
+            document.getElementById('infoName').value = acc.name;
+            document.getElementById('infoBalance').value = acc.balance.toLocaleString() + ' 원';
+        }
+
+        // 거래 내역 조회
+        const resTx = await fetch(`/accounts/${accountNo}/transactions`);
+        const txTbody = document.getElementById('txTableBody');
+        txTbody.innerHTML = '';
+
+        if (resTx.ok) {
+            const txList = await resTx.json();
+            if (txList.length === 0) {
+                txTbody.innerHTML = '<tr><td colspan="5" class="empty-row">거래 내역이 존재하지 않습니다.</td></tr>';
+                return;
+            }
+            txList.forEach(tx => {
+                const tr = document.createElement('tr');
+                const badge = tx.kind === '입금' 
+                    ? `<span class="badge badge-deposit">입금</span>` 
+                    : `<span class="badge badge-withdraw">출금</span>`;
+                tr.innerHTML = `
+                    <td>${tx.date || tx.transactionDate}</td>
+                    <td>${tx.time || tx.transactionTime}</td>
+                    <td>${badge}</td>
+                    <td>${tx.amount.toLocaleString()} 원</td>
+                    <td>${tx.balance.toLocaleString()} 원</td>
+                `;
+                txTbody.appendChild(tr);
+            });
+        }
+    }
+
+    function goToBanking(type) {
+        location.href = `banking.html?accountNo=${accountNo}&type=${type}`;
+    }
+
+    window.onload = loadDetail;
+</script>
+</body>
+</html>

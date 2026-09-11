@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <title>KOSA Bank - 대시보드</title>
+    <link rel="stylesheet" href="common.css">
+</head>
+<body>
+    <nav class="sidebar">
+        <h2>KOSA Bank</h2>
+        <ul>
+            <li><a href="dashboard.html" class="active">대시보드</a></li>
+            <li><a href="list.html">계좌 관리</a></li>
+            <li><a href="create.html">계좌 개설</a></li>
+            <li><a href="banking.html">입출금 처리</a></li>
+        </ul>
+        <a href="login.html" class="logout">로그아웃</a>
+    </nav>
+    <div class="main-wrapper">
+        <div class="topbar"><span>운영자(행원) 시스템 접속 중</span></div>
+        <div class="content">
+            <div class="form-row" style="margin-bottom:24px;">
+                <div class="card" style="flex:1;">
+                    <div class="card-title">전체 계좌 수</div>
+                    <div id="statTotalAccounts" style="font-size:2rem; font-weight:700; margin-top:10px; color:#2563eb;">-</div>
+                </div>
+                <div class="card" style="flex:1;">
+                    <div class="card-title">총 예수금 잔액</div>
+                    <div id="statTotalBalance" style="font-size:2rem; font-weight:700; margin-top:10px; color:#059669;">-</div>
+                </div>
+            </div>
+            <div class="card">
+                <div class="card-header">
+                    <div class="card-title">빠른 업무 바로가기</div>
+                </div>
+                <div style="display:flex; gap:12px;">
+                    <a href="create.html" class="btn btn-primary">+ 신규 계좌 개설</a>
+                    <a href="banking.html" class="btn btn-success">입출금 처리 실행</a>
+                    <a href="list.html" class="btn btn-secondary">계좌 목록 전체 조회</a>
+                </div>
+            </div>
+        </div>
+    </div>
+<script>
+    window.onload = async function() {
+        try {
+            const res = await fetch('/accounts');
+            if (res.ok) {
+                const accounts = await res.json();
+                document.getElementById('statTotalAccounts').innerText = accounts.length + ' 개';
+                const totalBalance = accounts.reduce((acc, cur) => acc + cur.balance, 0);
+                document.getElementById('statTotalBalance').innerText = totalBalance.toLocaleString() + ' 원';
+            }
+        } catch (e) {
+            console.error('대시보드 집계 오류', e);
+        }
+    };
+</script>
+</body>
+</html>

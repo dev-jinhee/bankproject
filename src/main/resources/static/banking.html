@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <title>KOSA Bank - 입출금 창구</title>
+    <link rel="stylesheet" href="common.css">
+</head>
+<body>
+    <nav class="sidebar">
+        <h2>KOSA Bank</h2>
+        <ul>
+            <li><a href="dashboard.html">대시보드</a></li>
+            <li><a href="list.html">계좌 관리</a></li>
+            <li><a href="create.html">계좌 개설</a></li>
+            <li><a href="banking.html" class="active">입출금 처리</a></li>
+        </ul>
+        <a href="login.html" class="logout">로그아웃</a>
+    </nav>
+    <div class="main-wrapper">
+        <div class="topbar"><span>운영자(행원) 시스템 접속 중</span></div>
+        <div class="content">
+            <div class="card" style="max-width:600px;">
+                <div class="card-header">
+                    <div class="card-title">입출금 거래 실행</div>
+                </div>
+                <div class="form-group" style="margin-bottom:16px;">
+                    <label>거래 대상 계좌번호</label>
+                    <input type="text" id="targetAccountNo" placeholder="계좌번호를 입력하세요">
+                </div>
+                <div class="form-group" style="margin-bottom:24px;">
+                    <label>거래 금액 (원)</label>
+                    <input type="number" id="tradeAmount" placeholder="금액 입력">
+                </div>
+                <div style="display:flex; gap:12px;">
+                    <button class="btn-success" style="flex:1;" onclick="executeBanking('deposit')">입금 처리</button>
+                    <button class="btn-danger" style="flex:1;" onclick="executeBanking('withdraw')">출금 처리</button>
+                </div>
+            </div>
+        </div>
+    </div>
+<script>
+    window.onload = function() {
+        const params = new URLSearchParams(window.location.search);
+        if (params.get('accountNo')) {
+            document.getElementById('targetAccountNo').value = params.get('accountNo');
+        }
+    };
+
+    async function executeBanking(type) {
+        const accountNo = document.getElementById('targetAccountNo').value.trim();
+        const amount = Number(document.getElementById('tradeAmount').value);
+
+        if (!accountNo || amount <= 0) return alert('계좌번호와 올바른 금액을 입력하세요.');
+
+        const res = await fetch(`/accounts/${accountNo}/${type}`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ amount })
+        });
+
+        const msg = await res.text();
+        alert(msg);
+        if (res.ok) {
+            location.href = `detail.html?accountNo=${accountNo}`;
+        }
+    }
+</script>
+</body>
+</html>
