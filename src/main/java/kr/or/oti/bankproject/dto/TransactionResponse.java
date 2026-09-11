@@ -3,17 +3,19 @@ package kr.or.oti.bankproject.dto;
 import java.time.format.DateTimeFormatter;
 
 import kr.or.oti.bankproject.domain.Transaction;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
 
-public class AccountResponse {
+@Getter
+@NoArgsConstructor 
+public class TransactionResponse {
 	private String date; 
 	private String time; 
 	private String kind; 
 	private long amount; 
-	private long balance; 
-
-	public AccountResponse() {}
+	private long balance;
 	
-	public AccountResponse(Transaction transaction) {
+	public TransactionResponse(Transaction transaction) {
 		DateTimeFormatter dateFormatter = DateTimeFormatter.ofPattern("yyyy년 MM월 dd일");
         DateTimeFormatter timeFormatter = DateTimeFormatter.ofPattern("HH시 mm분");
 
@@ -22,25 +24,5 @@ public class AccountResponse {
         this.kind = transaction.getKind();
         this.amount = transaction.getAmount();
         this.balance = transaction.getBalance();		
-	}
-
-	public String getDate() {
-		return date;
-	}
-
-	public String getTime() {
-		return time;
-	}
-
-	public String getKind() {
-		return kind;
-	}
-
-	public long getAmount() {
-		return amount;
-	}
-
-	public long getBalance() {
-		return balance;
-	}
+	}	
 }

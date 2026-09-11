@@ -15,7 +15,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import kr.or.oti.bankproject.domain.Account;
 import kr.or.oti.bankproject.dto.AccountCreateRequest;
-import kr.or.oti.bankproject.dto.AccountResponse;
+import kr.or.oti.bankproject.dto.TransactionResponse;
 import kr.or.oti.bankproject.dto.AmountRequest;
 import kr.or.oti.bankproject.service.BankService;
 
@@ -76,10 +76,10 @@ public class AccountController {
     // 6. 거래 내역 조회 (Transaction 엔티티 -> TransactionResponse DTO 변환)
     // GET //accounts/{accountNo}/transactions
     @GetMapping("/{accountNo}/transactions")
-    public ResponseEntity<List<AccountResponse>> getTransactions(@PathVariable String accountNo) {
-        List<AccountResponse> responses = bankService.getTransactions(accountNo)
+    public ResponseEntity<List<TransactionResponse>> getTransactions(@PathVariable String accountNo) {
+        List<TransactionResponse> responses = bankService.getTransactions(accountNo)
                 .stream()
-                .map(AccountResponse::new) // 도메인 객체를 화면용 DTO로 변환
+                .map(TransactionResponse::new) // 도메인 객체를 화면용 DTO로 변환
                 .collect(Collectors.toList());
 
         return ResponseEntity.ok(responses);

@@ -1,19 +1,14 @@
 package kr.or.oti.bankproject.dto;
 
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+
+@Getter
+@Setter
+@NoArgsConstructor
+@AllArgsConstructor
 public class AmountRequest {
 	private long amount;
-
-	public AmountRequest() {}
-
-	public AmountRequest(long amount) {
-		this.amount = amount;
-	}
-
-	public long getAmount() {
-		return amount;
-	}
-
-	public void setAmount(long amount) {
-		this.amount = amount;
-	}
 }

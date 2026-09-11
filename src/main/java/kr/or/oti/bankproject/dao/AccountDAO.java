@@ -2,9 +2,12 @@ package kr.or.oti.bankproject.dao;
 
 import java.util.List;
 
+import org.apache.ibatis.annotations.Mapper;
+
 import kr.or.oti.bankproject.domain.Account;
 import kr.or.oti.bankproject.domain.Transaction;
 
+@Mapper
 public interface AccountDAO {
     // 1. 계좌 등록 (INSERT INTO account ...)
     void addAccount(String accountNo, String name);
