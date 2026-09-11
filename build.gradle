@@ -18,23 +18,26 @@ repositories {
 }
 
 dependencies {
-	implementation 'org.springframework.boot:spring-boot-starter-webmvc'
-	compileOnly 'org.projectlombok:lombok'
-	developmentOnly 'org.springframework.boot:spring-boot-devtools'
-	runtimeOnly 'org.mariadb.jdbc:mariadb-java-client'
-	annotationProcessor 'org.projectlombok:lombok'
-	testImplementation 'org.springframework.boot:spring-boot-starter-webmvc-test'
-	testCompileOnly 'org.projectlombok:lombok'
-	testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
-	testAnnotationProcessor 'org.projectlombok:lombok'
+	implementation 'org.springframework.boot:spring-boot-starter-web'
 	
-	// Source: https://mvnrepository.com/artifact/org.mybatis.spring.boot/mybatis-spring-boot-starter
-	implementation("org.mybatis.spring.boot:mybatis-spring-boot-starter:3.0.3")
-	
-	// Source: https://mvnrepository.com/artifact/org.mariadb.jdbc/mariadb-java-client
-	implementation("org.mariadb.jdbc:mariadb-java-client:3.5.10")
-	
+	// DB 커넥션 풀(HikariCP) & DataSource 필수
 	implementation 'org.springframework.boot:spring-boot-starter-jdbc'
+
+	// MyBatis & MariaDB
+	implementation 'org.mybatis.spring.boot:mybatis-spring-boot-starter:3.0.3'
+	implementation 'org.mariadb.jdbc:mariadb-java-client:3.3.3'
+
+	// Lombok
+	compileOnly 'org.projectlombok:lombok'
+	annotationProcessor 'org.projectlombok:lombok'
+	
+	developmentOnly 'org.springframework.boot:spring-boot-devtools'
+
+	// test
+	testImplementation 'org.springframework.boot:spring-boot-starter-test'
+	testCompileOnly 'org.projectlombok:lombok'
+	testAnnotationProcessor 'org.projectlombok:lombok'
+	testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
 }
 
 tasks.named('test') {
